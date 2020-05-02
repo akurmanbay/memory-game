@@ -1,1 +1,3 @@
-# memory-game
+# MemoryGame
+
+> Added pod 'SnapKit'
