@@ -9,18 +9,18 @@
 import UIKit
 
 protocol PlaygroundDataSource: class {
-    func itemAtIndex(_ index: IndexPath) -> UIImage
+    func itemAtIndex(_ index: IndexPath) -> Product
 }
 
 protocol PlaygroundDelegate: class {
     func didSelectItem(atIndexPath indexPath: IndexPath)
 }
 
-enum ImageState {
-    case front, back
+enum CardSide {
+    case open, closed
     
     mutating func toggle() {
-        self = self == .back ? .front : .back
+        self = self == .closed ? .open : .closed
     }
 }
 
@@ -30,7 +30,7 @@ final class PlaygroundPanel: UIView {
     weak var delegate: PlaygroundDelegate?
     
     private let numberOfRows: CGFloat
-    private var imageStates: [ImageState]
+    private var imageStates: [CardSide]
     
     private lazy var customizedCellSize: CGFloat = (UIScreen.main.bounds.width - numberOfRows + 1) / numberOfRows
     private lazy var collectionViewHeight: CGFloat = customizedCellSize * numberOfRows + numberOfRows - 1
@@ -55,7 +55,7 @@ final class PlaygroundPanel: UIView {
     
     init(numberOfRows: Int) {
         self.numberOfRows = CGFloat(numberOfRows)
-        imageStates = Array(repeating: .front, count: numberOfRows * numberOfRows)
+        imageStates = Array(repeating: .closed, count: numberOfRows * numberOfRows)
         super.init(frame: .zero)
         backgroundColor = .white
         setupViews()
@@ -94,19 +94,24 @@ extension PlaygroundPanel: UICollectionViewDataSource, UICollectionViewDelegate 
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! CollectionCell
-        let image = dataSource?.itemAtIndex(indexPath)
-        cell.configure(imageState: imageStates[indexPath.row], image: image)
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell",
+                                                            for: indexPath) as? CollectionCell
+        else {
+            return UICollectionViewCell()
+        }
+        let product = dataSource?.itemAtIndex(indexPath)
+        cell.configure(imageState: imageStates[indexPath.row],
+                       imageSrc: product?.image.src)
         
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? CollectionCell else { return }
-        if imageStates[indexPath.row] == .front {
-            delegate?.didSelectItem(atIndexPath: indexPath)
-            imageStates[indexPath.row].toggle()
+        if imageStates[indexPath.row] == .closed {
             cell.didTapCell()
+            imageStates[indexPath.row].toggle()
+            delegate?.didSelectItem(atIndexPath: indexPath)
         }
     }
 }

@@ -41,9 +41,7 @@ class GameSettingsViewModel {
     func startImageDownloading(_ numberOfElements: Int) {
         shuffledProducts = Array(products.shuffled()[..<numberOfElements])
         var downloadedImageCounter: Int = 0
-        DispatchQueue.main.async {
-            self.showLoader?()
-        }
+        self.showLoader?()
         for product in shuffledProducts {
             downloadImage(product) { [weak self] in
                 downloadedImageCounter += 1
@@ -65,7 +63,7 @@ class GameSettingsViewModel {
     
     private func downloadImage(_ product: Product, didFetch: @escaping () -> ()) {
         downloaderService.fetchImage(fromUrl: product.image.src, success: { imageData in
-            ImageCache.shared.storage.insert(imageData, forKey: product.image.id)
+            ImageCache.shared.storage.insert(imageData, forKey: product.image.src)
             didFetch()
         }, failure: { error in
             debugPrint(error)

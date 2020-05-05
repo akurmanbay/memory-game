@@ -10,7 +10,7 @@ import Foundation
 
 class MainPlaygroundViewModel {
     
-    private let products: [Product]
+    let products: [Product]
     
     init(products: [Product]) {
         self.products = products
@@ -22,11 +22,6 @@ class MainPlaygroundViewModel {
     
     func getGridSize() -> Int {
         return Int(sqrt(Double(products.count)))
-    }
-    
-    func getImageData(at indexPath: IndexPath) -> Data? {
-        let id: UInt64 = products[indexPath.row].image.id
-        return ImageCache.shared.storage.value(forKey: id)
     }
     
     func getProduct(at indexPath: IndexPath) -> Product {

@@ -12,7 +12,7 @@ class ImageCache {
     
     static let shared = ImageCache()
     
-    let storage = Cache<UInt64, Data>()
+    let storage = Cache<String, Data>()
     
     private init() { }
 }

@@ -51,11 +51,7 @@ class MainPlaygroundPage: UIViewController {
         gameLogic.didFoundNotMatch = { [weak self] indexPaths in
             self?.playgroundView.didFoundNotMatch(at: indexPaths)
         }
-        
-        gameLogic.isUserInteractionEnabled = { [weak self] isEnabled in
-            self?.playgroundView.isUserInteractionEnabled = isEnabled
-        }
-        
+    
         gameLogic.didChangeNumberOfMatches = { [weak self] numberOfMatches in
             guard let numberOfPairs = self?.viewModel.getNumberOfPairs() else { return }
             if numberOfPairs == numberOfMatches {
@@ -111,9 +107,8 @@ class MainPlaygroundPage: UIViewController {
 }
 
 extension MainPlaygroundPage: PlaygroundDataSource {
-    func itemAtIndex(_ indexPath: IndexPath) -> UIImage {
-        guard let imageData = viewModel.getImageData(at: indexPath), let image = UIImage(data: imageData) else { return UIImage() }
-        return image
+    func itemAtIndex(_ indexPath: IndexPath) -> Product {
+        return viewModel.products[indexPath.row]
     }
 }
 
