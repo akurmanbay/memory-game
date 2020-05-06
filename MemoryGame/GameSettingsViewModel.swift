@@ -10,6 +10,7 @@ import Foundation
 
 class GameSettingsViewModel {
     
+    // MARK: - Properties
     var didDownloadImages: (() -> ())?
     var showLoader: (() -> ())?
     var hideLoader: (() -> ())?
@@ -18,10 +19,12 @@ class GameSettingsViewModel {
     private var products: [Product] = []
     private var shuffledProducts: [Product] = []
 
+    // MARK: - Lifecycle
     init(downloaderService: DownloaderService) {
         self.downloaderService = downloaderService
     }
     
+    // MARK: - Public
     func getProducts() -> [Product] {
         return shuffledProducts
     }
@@ -56,6 +59,7 @@ class GameSettingsViewModel {
         }
     }
     
+    // MARK: - Private
     private func didEndImageDownloading() {
         shuffledProducts += shuffledProducts
         shuffledProducts = shuffledProducts.shuffled()
@@ -69,4 +73,5 @@ class GameSettingsViewModel {
             debugPrint(error)
         })
     }
+    
 }

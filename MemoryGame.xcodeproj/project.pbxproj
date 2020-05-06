@@ -21,7 +21,6 @@
 		0D0AA6772337C1B2002DE983 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D0AA6762337C1B2002DE983 /* UIImage.swift */; };
 		0D0AA6792337D4F3002DE983 /* CanDisplayLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D0AA6782337D4F3002DE983 /* CanDisplayLoader.swift */; };
 		0D0AA67C2337D94E002DE983 /* LoaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D0AA67B2337D94E002DE983 /* LoaderView.swift */; };
-		0D0AA67E2337EEB2002DE983 /* GameLevelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D0AA67D2337EEB2002DE983 /* GameLevelView.swift */; };
 		0D0AA6802337F8EA002DE983 /* GameLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D0AA67F2337F8EA002DE983 /* GameLogic.swift */; };
 		0D0AA68223389CCF002DE983 /* MainActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D0AA68123389CCF002DE983 /* MainActionButton.swift */; };
 		0D0E1204232EBFB700AAF3FF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D0E1203232EBFB700AAF3FF /* AppDelegate.swift */; };
@@ -32,6 +31,7 @@
 		0D0E1227232EBFB800AAF3FF /* MemoryGameUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D0E1226232EBFB800AAF3FF /* MemoryGameUITests.swift */; };
 		0D1D75A1245FAD5C002C6BAA /* UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D1D75A0245FAD5C002C6BAA /* UIImageView.swift */; };
 		0D1D75A724621B0C002C6BAA /* CardSide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D1D75A624621B0C002C6BAA /* CardSide.swift */; };
+		0D1D75AA2462B9FC002C6BAA /* ConfigurableBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D1D75A92462B9FC002C6BAA /* ConfigurableBackground.swift */; };
 		0DBD7E85232ECE8F006AAE6B /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DBD7E84232ECE8F006AAE6B /* AppCoordinator.swift */; };
 		0DBD7E89232ECEDA006AAE6B /* AppPagesFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DBD7E88232ECEDA006AAE6B /* AppPagesFactory.swift */; };
 		0DBD7E8C232ED368006AAE6B /* GameSettingsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DBD7E8B232ED368006AAE6B /* GameSettingsPage.swift */; };
@@ -72,7 +72,6 @@
 		0D0AA6762337C1B2002DE983 /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		0D0AA6782337D4F3002DE983 /* CanDisplayLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanDisplayLoader.swift; sourceTree = "<group>"; };
 		0D0AA67B2337D94E002DE983 /* LoaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoaderView.swift; sourceTree = "<group>"; };
-		0D0AA67D2337EEB2002DE983 /* GameLevelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameLevelView.swift; sourceTree = "<group>"; };
 		0D0AA67F2337F8EA002DE983 /* GameLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameLogic.swift; sourceTree = "<group>"; };
 		0D0AA68123389CCF002DE983 /* MainActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainActionButton.swift; sourceTree = "<group>"; };
 		0D0E1200232EBFB700AAF3FF /* MemoryGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MemoryGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -89,6 +88,7 @@
 		0D0E1228232EBFB800AAF3FF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0D1D75A0245FAD5C002C6BAA /* UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageView.swift; sourceTree = "<group>"; };
 		0D1D75A624621B0C002C6BAA /* CardSide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardSide.swift; sourceTree = "<group>"; };
+		0D1D75A92462B9FC002C6BAA /* ConfigurableBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurableBackground.swift; sourceTree = "<group>"; };
 		0DBD7E84232ECE8F006AAE6B /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		0DBD7E88232ECEDA006AAE6B /* AppPagesFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPagesFactory.swift; sourceTree = "<group>"; };
 		0DBD7E8B232ED368006AAE6B /* GameSettingsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSettingsPage.swift; sourceTree = "<group>"; };
@@ -180,7 +180,6 @@
 			isa = PBXGroup;
 			children = (
 				0D0AA67A2337D93D002DE983 /* Loader */,
-				0D0AA67D2337EEB2002DE983 /* GameLevelView.swift */,
 				0DBD7E8B232ED368006AAE6B /* GameSettingsPage.swift */,
 			);
 			name = Views;
@@ -327,9 +326,18 @@
 			name = Model;
 			sourceTree = "<group>";
 		};
+		0D1D75A82462B9E3002C6BAA /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				0D1D75A92462B9FC002C6BAA /* ConfigurableBackground.swift */,
+			);
+			name = Protocols;
+			sourceTree = "<group>";
+		};
 		0DBD7E81232ECB60006AAE6B /* PresentationLayer */ = {
 			isa = PBXGroup;
 			children = (
+				0D1D75A82462B9E3002C6BAA /* Protocols */,
 				0DBD7E87232ECEBD006AAE6B /* PagesFactory */,
 				0DBD7E86232ECEA6006AAE6B /* Coordinators */,
 				0D0AA68A2338AA7B002DE983 /* Extensions */,
@@ -657,8 +665,8 @@
 				0D1D75A724621B0C002C6BAA /* CardSide.swift in Sources */,
 				0D0AA6792337D4F3002DE983 /* CanDisplayLoader.swift in Sources */,
 				0D0AA6712336CDD4002DE983 /* GameSettingsViewModel.swift in Sources */,
+				0D1D75AA2462B9FC002C6BAA /* ConfigurableBackground.swift in Sources */,
 				0D0AA67C2337D94E002DE983 /* LoaderView.swift in Sources */,
-				0D0AA67E2337EEB2002DE983 /* GameLevelView.swift in Sources */,
 				0D0AA66723328AAB002DE983 /* Product.swift in Sources */,
 				0D0AA66F2335F32D002DE983 /* CollectionCell.swift in Sources */,
 			);

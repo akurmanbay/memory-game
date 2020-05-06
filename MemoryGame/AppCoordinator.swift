@@ -34,6 +34,10 @@ class AppCoordinator {
             self?.showMainPlaygroundPage(products: products)
         }
         
+        gameSettingsPage.didTapBackButton = { [weak self] in
+            self?.navigationController.popViewController(animated: true)
+        }
+        
         navigationController.pushViewController(gameSettingsPage, animated: true)
     }
     

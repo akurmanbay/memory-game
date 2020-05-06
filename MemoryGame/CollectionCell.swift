@@ -18,7 +18,6 @@ class CollectionCell: UICollectionViewCell {
         image.contentMode = .scaleAspectFit
         image.layer.masksToBounds = true
         image.layer.cornerRadius = 4
-        image.layer.borderWidth = 4
         return image
     }()
     
@@ -27,7 +26,7 @@ class CollectionCell: UICollectionViewCell {
         image.contentMode = .scaleAspectFit
         image.layer.masksToBounds = true
         image.layer.cornerRadius = 4
-        image.backgroundColor = .red
+        image.backgroundColor = UIColor(red: 92 / 255, green: 108 / 255, blue: 190 / 255, alpha: 1)
         return image
     }()
     
@@ -59,14 +58,12 @@ class CollectionCell: UICollectionViewCell {
         else { return }
         imageView.image = UIImage(data: imageData)
         coverImageView.alpha = imageState == .open ? 0 : 1
-        
-//        imageView.layer.borderColor = UIColor.yellow.cgColor
     }
     
     func didTapCell() {
         UIView.animate(withDuration: 0.3,
                        delay: 0,
-                       options: .transitionFlipFromLeft,
+                       options: .transitionCurlUp,
                        animations: {
             self.coverImageView.toggleAlpha()
         }, completion: nil)

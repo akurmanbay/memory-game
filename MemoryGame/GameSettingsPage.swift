@@ -8,10 +8,11 @@
 
 import UIKit
 
-final class GameSettingsPage: UIViewController, CanDisplayLoader {
-    
+final class GameSettingsPage: UIViewController, CanDisplayLoader, ConfigurableBackground {
+
+    // MARK: - Properties
     var didTapContinue: (([Product]) -> ())?
-    
+    var didTapBackButton: (() -> ())?
     private let viewModel: GameSettingsViewModel
     
     private let easyModeButton: MainActionButton = {
@@ -26,6 +27,12 @@ final class GameSettingsPage: UIViewController, CanDisplayLoader {
         return button
     }()
     
+    private let backToMainButton: MainActionButton = {
+        let button = MainActionButton(title: "Main Page")
+        button.addTarget(self, action: #selector(didTapBackToMainPage), for: .touchUpInside)
+        return button
+    }()
+    
     private let stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.distribution = .fillEqually
@@ -34,6 +41,8 @@ final class GameSettingsPage: UIViewController, CanDisplayLoader {
         return stackView
     }()
     
+    
+    // MARK: - Lifecycle
     init(viewModel: GameSettingsViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -45,14 +54,14 @@ final class GameSettingsPage: UIViewController, CanDisplayLoader {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        title = "Game Settings"
-        
-        bindToViewModel()
+        setBackgroundImage(named: Constants.backgroundImageName)
         setupViews()
+
+        bindToViewModel()
         viewModel.fetchImages()
     }
     
+    // MARK: - Private
     private func bindToViewModel() {
         viewModel.didDownloadImages = { [weak self] in
             guard let products = self?.viewModel.getProducts() else { return }
@@ -76,6 +85,14 @@ final class GameSettingsPage: UIViewController, CanDisplayLoader {
             $0.center.equalToSuperview()
             $0.width.equalTo(150)
         }
+        
+        view.addSubview(backToMainButton)
+        backToMainButton.snp.makeConstraints {
+            $0.left.equalToSuperview().offset(32)
+            $0.right.equalToSuperview().offset(-32)
+            $0.bottom.equalToSuperview().offset(-32)
+            $0.height.equalTo(48)
+        }
     }
     
     @objc private func didTapEasyMode() {
@@ -85,4 +102,17 @@ final class GameSettingsPage: UIViewController, CanDisplayLoader {
     @objc private func didTapHardMode() {
         viewModel.startImageDownloading(18)
     }
+    
+    @objc private func didTapBackToMainPage() {
+        didTapBackButton?()
+    }
+}
+
+// MARK: - Constants
+extension GameSettingsPage {
+    
+    enum Constants {
+        static let backgroundImageName = "background"
+    }
+    
 }
