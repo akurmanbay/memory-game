@@ -16,24 +16,24 @@ protocol PlaygroundDelegate: class {
     func didSelectItem(atIndexPath indexPath: IndexPath)
 }
 
-enum CardSide {
-    case open, closed
-    
-    mutating func toggle() {
-        self = self == .closed ? .open : .closed
-    }
-}
-
 final class PlaygroundPanel: UIView {
- 
+
+    // MARK: - Properties
     weak var dataSource: PlaygroundDataSource?
     weak var delegate: PlaygroundDelegate?
-    
+
     private let numberOfRows: CGFloat
     private var imageStates: [CardSide]
     
-    private lazy var customizedCellSize: CGFloat = (UIScreen.main.bounds.width - numberOfRows + 1) / numberOfRows
-    private lazy var collectionViewHeight: CGFloat = customizedCellSize * numberOfRows + numberOfRows - 1
+    private lazy var customizedCellSize: CGFloat = {
+        let screenWidth = UIScreen.main.bounds.width
+        let collectionViewWidth = screenWidth - 2 * Constants.collectionSideOffset
+        return (collectionViewWidth - numberOfRows + 1) / numberOfRows
+    }()
+    
+    private lazy var collectionViewHeight: CGFloat = {
+        return customizedCellSize * numberOfRows + numberOfRows - 1
+    }()
     
     private lazy var layout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
@@ -53,6 +53,7 @@ final class PlaygroundPanel: UIView {
         return collectionView
     }()
     
+    // MARK: - Lifecycle
     init(numberOfRows: Int) {
         self.numberOfRows = CGFloat(numberOfRows)
         imageStates = Array(repeating: .closed, count: numberOfRows * numberOfRows)
@@ -61,6 +62,11 @@ final class PlaygroundPanel: UIView {
         setupViews()
     }
     
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Public
     func didFoundNotMatch(at indexPaths: [IndexPath]) {
         indexPaths.forEach {
             self.imageStates[$0.row].toggle()
@@ -71,10 +77,12 @@ final class PlaygroundPanel: UIView {
         self.collectionView.reloadItems(at: indexPaths)
     }
     
+    // MARK: - Private
     private func setupViews() {
         addSubview(collectionView)
         collectionView.snp.makeConstraints {
-            $0.left.right.equalToSuperview()
+            $0.left.equalToSuperview().offset(Constants.collectionSideOffset)
+            $0.right.equalToSuperview().offset(-Constants.collectionSideOffset)
             $0.centerY.equalToSuperview()
             $0.height.equalTo(collectionViewHeight)
         }
@@ -82,12 +90,10 @@ final class PlaygroundPanel: UIView {
         collectionView.register(CollectionCell.self, forCellWithReuseIdentifier: "Cell")
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 }
 
-extension PlaygroundPanel: UICollectionViewDataSource, UICollectionViewDelegate {
+// MARK: - UICollectionViewDataSource
+extension PlaygroundPanel: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return Int(numberOfRows * numberOfRows)
@@ -105,6 +111,11 @@ extension PlaygroundPanel: UICollectionViewDataSource, UICollectionViewDelegate 
         
         return cell
     }
+
+}
+
+// MARK: - UICollectionViewDelegate
+extension PlaygroundPanel: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? CollectionCell else { return }
@@ -114,4 +125,14 @@ extension PlaygroundPanel: UICollectionViewDataSource, UICollectionViewDelegate 
             delegate?.didSelectItem(atIndexPath: indexPath)
         }
     }
+    
+}
+
+// MARK: - Constants
+extension PlaygroundPanel {
+    
+    enum Constants {
+        static let collectionSideOffset: CGFloat = 8
+    }
+    
 }

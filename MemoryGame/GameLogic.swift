@@ -10,6 +10,7 @@ import Foundation
 
 class GameLogic {
     
+    // MARK: - Properties
     private var foundItems: Int = 0 {
         didSet {
             didChangeNumberOfMatches?(foundItems)
@@ -20,22 +21,25 @@ class GameLogic {
     private var selectedIndexPaths: [IndexPath] = []
     
     var didChangeNumberOfMatches: ((Int) -> ())?
-    var didFoundNotMatch: (([IndexPath]) -> ())?
+    var didNotMatch: (([IndexPath]) -> ())?
 
+    // MARK: - Lifecycle
     init(numberOfDuplicates: Int) {
         self.numberOfDuplicates = numberOfDuplicates
     }
     
+    // MARK: - Public
     func add(item: Product, atPosition indexPath: IndexPath) {
         selectedItems.append((item, indexPath))
         
         if selectedItems.count % numberOfDuplicates == 0 {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 self.check()
             }
         }
     }
 
+    // MARK: - Private
     private func check() {
         var openItems = [(item: Product, indexPath: IndexPath)]()
         for _ in 0..<numberOfDuplicates {
@@ -46,13 +50,15 @@ class GameLogic {
         checkForSimilarity(items: openItems)
     }
     
-    // MARK: - Lazy check for uniqueness by using Set
+    // MARK: - Check for uniqueness by using Set
     private func checkForSimilarity(items: [(item: Product, indexPath: IndexPath)]) {
         let productIds = items.map { $0.item.image.id }
         let uniqueElements = Set(productIds)
         if uniqueElements.count > 1 {
             let selectedIndexes = items.map { $0.indexPath }
-            didFoundNotMatch?(selectedIndexes)
+            didNotMatch?(selectedIndexes)
+        } else {
+            foundItems += 1
         }
     }
     

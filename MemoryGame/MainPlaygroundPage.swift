@@ -8,7 +8,9 @@
 
 import UIKit
 
-class MainPlaygroundPage: UIViewController {
+final class MainPlaygroundPage: UIViewController {
+    
+    // MARK: Properties
     
     var didEndGame: (() -> ())?
     
@@ -30,6 +32,8 @@ class MainPlaygroundPage: UIViewController {
     private let viewModel: MainPlaygroundViewModel
     private let gameLogic: GameLogic
     
+    
+    // MARK: - Lifecycle
     init(viewModel: MainPlaygroundViewModel, gameLogic: GameLogic) {
         self.viewModel = viewModel
         self.gameLogic = gameLogic
@@ -40,6 +44,11 @@ class MainPlaygroundPage: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: true)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -47,8 +56,10 @@ class MainPlaygroundPage: UIViewController {
         layoutUI()
     }
     
+    
+    // MARK: - Private
     private func binding() {
-        gameLogic.didFoundNotMatch = { [weak self] indexPaths in
+        gameLogic.didNotMatch = { [weak self] indexPaths in
             self?.playgroundView.didFoundNotMatch(at: indexPaths)
         }
     
@@ -58,11 +69,6 @@ class MainPlaygroundPage: UIViewController {
                 self?.showAlertController()
             }
         }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: true)
     }
     
     private func layoutUI() {
@@ -87,7 +93,7 @@ class MainPlaygroundPage: UIViewController {
         alertController.addAction(submitAction)
         present(alertController, animated: true, completion: nil)
     }
-    
+
     private func showExitConfirmationAlert() {
         let alertController = UIAlertController(title: "Exit", message: "Are you sure you want to quit the game?", preferredStyle: .alert)
         let submitAction = UIAlertAction(title: "Submit", style: .default) { _ in
@@ -95,7 +101,7 @@ class MainPlaygroundPage: UIViewController {
             self.didEndGame?()
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        
+
         alertController.addAction(submitAction)
         alertController.addAction(cancelAction)
         present(alertController, animated: true, completion: nil)
@@ -104,17 +110,24 @@ class MainPlaygroundPage: UIViewController {
     @objc private func didTapExitButton() {
         showExitConfirmationAlert()
     }
+    
 }
 
+// MARK: - PlaygroundDataSource
 extension MainPlaygroundPage: PlaygroundDataSource {
+    
     func itemAtIndex(_ indexPath: IndexPath) -> Product {
         return viewModel.products[indexPath.row]
     }
+    
 }
 
+// MARK: - PlaygroundDelegate
 extension MainPlaygroundPage: PlaygroundDelegate {
+    
     func didSelectItem(atIndexPath indexPath: IndexPath) {
         gameLogic.add(item: viewModel.getProduct(at: indexPath),
                       atPosition: indexPath)
     }
+    
 }

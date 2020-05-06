@@ -31,6 +31,7 @@
 		0D0E121C232EBFB800AAF3FF /* MemoryGameTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D0E121B232EBFB800AAF3FF /* MemoryGameTests.swift */; };
 		0D0E1227232EBFB800AAF3FF /* MemoryGameUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D0E1226232EBFB800AAF3FF /* MemoryGameUITests.swift */; };
 		0D1D75A1245FAD5C002C6BAA /* UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D1D75A0245FAD5C002C6BAA /* UIImageView.swift */; };
+		0D1D75A724621B0C002C6BAA /* CardSide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D1D75A624621B0C002C6BAA /* CardSide.swift */; };
 		0DBD7E85232ECE8F006AAE6B /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DBD7E84232ECE8F006AAE6B /* AppCoordinator.swift */; };
 		0DBD7E89232ECEDA006AAE6B /* AppPagesFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DBD7E88232ECEDA006AAE6B /* AppPagesFactory.swift */; };
 		0DBD7E8C232ED368006AAE6B /* GameSettingsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DBD7E8B232ED368006AAE6B /* GameSettingsPage.swift */; };
@@ -87,6 +88,7 @@
 		0D0E1226232EBFB800AAF3FF /* MemoryGameUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryGameUITests.swift; sourceTree = "<group>"; };
 		0D0E1228232EBFB800AAF3FF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0D1D75A0245FAD5C002C6BAA /* UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageView.swift; sourceTree = "<group>"; };
+		0D1D75A624621B0C002C6BAA /* CardSide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardSide.swift; sourceTree = "<group>"; };
 		0DBD7E84232ECE8F006AAE6B /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		0DBD7E88232ECEDA006AAE6B /* AppPagesFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPagesFactory.swift; sourceTree = "<group>"; };
 		0DBD7E8B232ED368006AAE6B /* GameSettingsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSettingsPage.swift; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 		0D0AA66B23329D2E002DE983 /* Playground */ = {
 			isa = PBXGroup;
 			children = (
+				0D1D75A524621AF9002C6BAA /* Model */,
 				0D0AA6862338AA26002DE983 /* Views */,
 				0D0AA6872338AA2D002DE983 /* ViewModels */,
 			);
@@ -314,6 +317,14 @@
 				0D0AA66323328AAB002DE983 /* Product.swift */,
 			);
 			path = ResponseModels;
+			sourceTree = "<group>";
+		};
+		0D1D75A524621AF9002C6BAA /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				0D1D75A624621B0C002C6BAA /* CardSide.swift */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 		0DBD7E81232ECB60006AAE6B /* PresentationLayer */ = {
@@ -643,6 +654,7 @@
 				0D0E120C232EBFB700AAF3FF /* MemoryGame.xcdatamodeld in Sources */,
 				0D1D75A1245FAD5C002C6BAA /* UIImageView.swift in Sources */,
 				0D0AA66823328AAB002DE983 /* JsonParser.swift in Sources */,
+				0D1D75A724621B0C002C6BAA /* CardSide.swift in Sources */,
 				0D0AA6792337D4F3002DE983 /* CanDisplayLoader.swift in Sources */,
 				0D0AA6712336CDD4002DE983 /* GameSettingsViewModel.swift in Sources */,
 				0D0AA67C2337D94E002DE983 /* LoaderView.swift in Sources */,
