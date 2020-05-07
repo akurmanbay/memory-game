@@ -11,25 +11,45 @@ import UIKit
 final class GameSettingsPage: UIViewController, CanDisplayLoader, ConfigurableBackground {
 
     // MARK: - Properties
-    var didTapContinue: (([Product]) -> ())?
+    var didTapContinue: (([Product], PlaySettings) -> ())?
     var didTapBackButton: (() -> ())?
     private let viewModel: GameSettingsViewModel
+    private let pickerLogic: PickerLogic
+    private lazy var currentPickerValues = pickerLogic.getCurrentValues()
     
-    private let easyModeButton: MainActionButton = {
-        let button = MainActionButton(title: "Easy Mode (4x4)")
-        button.addTarget(self, action: #selector(didTapEasyMode), for: .touchUpInside)
-        return button
+    private lazy var pickerView: PickerView = {
+        let picker = PickerView(pickerLogic: pickerLogic)
+        picker.backgroundColor = Constants.purplColor
+        picker.layer.masksToBounds = true
+        picker.layer.cornerRadius = 4
+        return picker
     }()
     
-    private let hardModeButton: MainActionButton = {
-        let button = MainActionButton(title: "Hard Mode (6x6)")
-        button.addTarget(self, action: #selector(didTapHardMode), for: .touchUpInside)
-        return button
+    private let numberOfCardsInSetLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 18)
+        label.text = Constants.numberOfCardsInSet
+        return label
+    }()
+    
+    private let gridSizeLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 18)
+        label.text = Constants.gridSize
+        return label
     }()
     
     private let backToMainButton: MainActionButton = {
         let button = MainActionButton(title: "Main Page")
         button.addTarget(self, action: #selector(didTapBackToMainPage), for: .touchUpInside)
+        return button
+    }()
+    
+    private let startButton: MainActionButton = {
+        let button = MainActionButton(title: "Let's go")
+        button.addTarget(self, action: #selector(didTapStartButton), for: .touchUpInside)
         return button
     }()
     
@@ -41,10 +61,10 @@ final class GameSettingsPage: UIViewController, CanDisplayLoader, ConfigurableBa
         return stackView
     }()
     
-    
     // MARK: - Lifecycle
-    init(viewModel: GameSettingsViewModel) {
+    init(viewModel: GameSettingsViewModel, pickerLogic: PickerLogic) {
         self.viewModel = viewModel
+        self.pickerLogic = pickerLogic
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -56,16 +76,16 @@ final class GameSettingsPage: UIViewController, CanDisplayLoader, ConfigurableBa
         super.viewDidLoad()
         setBackgroundImage(named: Constants.backgroundImageName)
         setupViews()
-
+        updateLabelValues()
         bindToViewModel()
         viewModel.fetchImages()
     }
     
     // MARK: - Private
     private func bindToViewModel() {
-        viewModel.didDownloadImages = { [weak self] in
+        viewModel.didDownloadImages = { [weak self] playSettings in
             guard let products = self?.viewModel.getProducts() else { return }
-            self?.didTapContinue?(products)
+            self?.didTapContinue?(products, playSettings)
         }
         
         viewModel.showLoader = { [weak self] in
@@ -75,15 +95,34 @@ final class GameSettingsPage: UIViewController, CanDisplayLoader, ConfigurableBa
         viewModel.hideLoader = { [weak self] in
             self?.hideLoader()
         }
+        
+        pickerLogic.didUpdateValues = { [weak self] in
+            self?.updateLabelValues()
+        }
+    }
+    
+    private func updateLabelValues() {
+        currentPickerValues = pickerLogic.getCurrentValues()
+        numberOfCardsInSetLabel.text = Constants.numberOfCardsInSet +
+            String(currentPickerValues.0)
+        gridSizeLabel.text = Constants.gridSize + currentPickerValues.1.string()
     }
     
     private func setupViews() {
-        stackView.addArrangedSubview(easyModeButton)
-        stackView.addArrangedSubview(hardModeButton)
+        view.addSubview(pickerView)
+        pickerView.snp.makeConstraints {
+            $0.left.equalToSuperview().offset(16)
+            $0.right.equalToSuperview().offset(-16)
+            $0.top.equalToSuperview().offset(32)
+            $0.height.equalTo(150)
+        }
+        
+        stackView.addArrangedSubview(numberOfCardsInSetLabel)
+        stackView.addArrangedSubview(gridSizeLabel)
         view.addSubview(stackView)
         stackView.snp.makeConstraints {
-            $0.center.equalToSuperview()
-            $0.width.equalTo(150)
+            $0.top.equalTo(pickerView.snp.bottom).offset(16)
+            $0.left.equalToSuperview().offset(16)
         }
         
         view.addSubview(backToMainButton)
@@ -93,14 +132,18 @@ final class GameSettingsPage: UIViewController, CanDisplayLoader, ConfigurableBa
             $0.bottom.equalToSuperview().offset(-32)
             $0.height.equalTo(48)
         }
+        
+        view.addSubview(startButton)
+        startButton.snp.makeConstraints {
+            $0.left.equalToSuperview().offset(32)
+            $0.right.equalToSuperview().offset(-32)
+            $0.bottom.equalTo(backToMainButton.snp.top).offset(-16)
+            $0.height.equalTo(48)
+        }
     }
     
-    @objc private func didTapEasyMode() {
-        viewModel.startImageDownloading(8)
-    }
-    
-    @objc private func didTapHardMode() {
-        viewModel.startImageDownloading(18)
+    @objc private func didTapStartButton() {
+        viewModel.prepareCardImages(with: currentPickerValues)
     }
     
     @objc private func didTapBackToMainPage() {
@@ -113,6 +156,9 @@ extension GameSettingsPage {
     
     enum Constants {
         static let backgroundImageName = "background"
+        static let purplColor = UIColor(red: 92 / 255, green: 108 / 255, blue: 190 / 255, alpha: 1)
+        static let numberOfCardsInSet = "Number of cards in a set: "
+        static let gridSize = "Grid size: "
     }
     
 }

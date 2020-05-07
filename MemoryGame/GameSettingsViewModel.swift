@@ -8,10 +8,12 @@
 
 import Foundation
 
+typealias PlaySettings = (Int, Grid)
+
 class GameSettingsViewModel {
     
     // MARK: - Properties
-    var didDownloadImages: (() -> ())?
+    var didDownloadImages: ((PlaySettings) -> ())?
     var showLoader: (() -> ())?
     var hideLoader: (() -> ())?
     
@@ -36,23 +38,25 @@ class GameSettingsViewModel {
             DispatchQueue.main.async {
                 self?.hideLoader?()
             }
-        }, failure: { error in
+        },
+        failure: { [weak self] error in
+            self?.hideLoader?()
             debugPrint(error)
         })
     }
     
-    func startImageDownloading(_ numberOfElements: Int) {
-        shuffledProducts = Array(products.shuffled()[..<numberOfElements])
-        var downloadedImageCounter: Int = 0
-        self.showLoader?()
+    func prepareCardImages(with value: PlaySettings) {
+        let numberOfUniqueElements = value.1.size() / value.0
+        var loadedImageCounter = 0
+        shuffledProducts = Array(products.shuffled()[..<numberOfUniqueElements])
+        showLoader?()
         for product in shuffledProducts {
             downloadImage(product) { [weak self] in
-                downloadedImageCounter += 1
-                if downloadedImageCounter == numberOfElements {
-                    self?.didEndImageDownloading()
+                loadedImageCounter += 1
+                if loadedImageCounter == numberOfUniqueElements {
                     DispatchQueue.main.async {
                         self?.hideLoader?()
-                        self?.didDownloadImages?()
+                        self?.didEndImageDownloading(with: value)
                     }
                 }
             }
@@ -60,9 +64,13 @@ class GameSettingsViewModel {
     }
     
     // MARK: - Private
-    private func didEndImageDownloading() {
-        shuffledProducts += shuffledProducts
-        shuffledProducts = shuffledProducts.shuffled()
+    private func didEndImageDownloading(with value: PlaySettings) {
+        var shuffledProductsCurrent = [Product]()
+        for _ in 0..<value.0 {
+            shuffledProductsCurrent += shuffledProducts
+        }
+        shuffledProducts = shuffledProductsCurrent.shuffled()
+        didDownloadImages?(value)
     }
     
     private func downloadImage(_ product: Product, didFetch: @escaping () -> ()) {

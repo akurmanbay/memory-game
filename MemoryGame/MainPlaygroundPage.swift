@@ -23,7 +23,8 @@ final class MainPlaygroundPage: UIViewController {
     }()
     
     private lazy var playgroundView: PlaygroundPanel = {
-        let view = PlaygroundPanel(numberOfRows: viewModel.getGridSize())
+        let view = PlaygroundPanel(grid: viewModel.playSettings.1)
+        view.backgroundColor = .black
         view.dataSource = self
         view.delegate = self
         return view
@@ -54,7 +55,7 @@ final class MainPlaygroundPage: UIViewController {
     // MARK: - Private
     private func binding() {
         gameLogic.didNotMatch = { [weak self] indexPaths in
-            self?.playgroundView.didFoundNotMatch(at: indexPaths)
+            self?.playgroundView.cardsNotMatch(at: indexPaths)
         }
     
         gameLogic.didChangeNumberOfMatches = { [weak self] numberOfMatches in
@@ -79,7 +80,7 @@ final class MainPlaygroundPage: UIViewController {
     }
     
     private func showAlertController() {
-        let alertController = UIAlertController(title: "Congratulations", message: "You win the game!", preferredStyle: .alert)
+        let alertController = UIAlertController(title: "Congratulations", message: "You won the game!", preferredStyle: .alert)
         let submitAction = UIAlertAction(title: "Ok", style: .default) { _ in
             alertController.dismiss(animated: true, completion: nil)
             self.didEndGame?()

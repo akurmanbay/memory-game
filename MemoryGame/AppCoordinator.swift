@@ -20,7 +20,7 @@ class AppCoordinator {
     func start() {
         let starterPage = pagesFactory.createMainStarterPage()
         
-        starterPage.didTapStartAGame = { [weak self] in
+        starterPage.didStartGame = { [weak self] in
             self?.showGameSettingsPage()
         }
         
@@ -30,8 +30,8 @@ class AppCoordinator {
     private func showGameSettingsPage() {
         let gameSettingsPage = pagesFactory.createSettingsPage()
         
-        gameSettingsPage.didTapContinue = { [weak self] products in
-            self?.showMainPlaygroundPage(products: products)
+        gameSettingsPage.didTapContinue = { [weak self] products, playSettings in
+            self?.showMainPlaygroundPage(products: products, playSettings: playSettings)
         }
         
         gameSettingsPage.didTapBackButton = { [weak self] in
@@ -41,8 +41,9 @@ class AppCoordinator {
         navigationController.pushViewController(gameSettingsPage, animated: true)
     }
     
-    private func showMainPlaygroundPage(products: [Product]) {
-        let mainPlaygroundPage = pagesFactory.createMainPlaygroundPage(products: products)
+    private func showMainPlaygroundPage(products: [Product], playSettings: PlaySettings) {
+        let mainPlaygroundPage = pagesFactory.createMainPlaygroundPage(products: products,
+                                                                       playSettings: playSettings)
         
         mainPlaygroundPage.didEndGame = { [weak self] in
             self?.navigationController.popToRootViewController(animated: true)

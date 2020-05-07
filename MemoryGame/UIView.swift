@@ -1,5 +1,5 @@
 //
-//  UIImageView.swift
+//  UIView.swift
 //  MemoryGame
 //
 //  Created by Ayan Kurmanbay on 5/4/20.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension UIImageView {
+extension UIView {
     func toggleAlpha() {
         self.alpha = self.alpha == 0 ? 1 : 0
     }

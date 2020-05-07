@@ -8,6 +8,7 @@
 
 import Foundation
 
+// TODO: Add DI library
 class AppPagesFactory {
 
     // MARK: Pages
@@ -16,12 +17,15 @@ class AppPagesFactory {
     }
     
     func createSettingsPage() -> GameSettingsPage {
-        return GameSettingsPage(viewModel: createGameSettingsViewModel())
+        return GameSettingsPage(viewModel: createGameSettingsViewModel(),
+                                pickerLogic: createPickerLogic())
     }
     
-    func createMainPlaygroundPage(products: [Product]) -> MainPlaygroundPage {
-        return MainPlaygroundPage(viewModel: createMainPlaygroundViewModel(prodcuts: products),
-                                  gameLogic: createGameLogic())
+    func createMainPlaygroundPage(products: [Product],
+                                  playSettings: PlaySettings) -> MainPlaygroundPage {
+        return MainPlaygroundPage(viewModel: createMainPlaygroundViewModel(prodcuts: products,
+                                                                           playSettings: playSettings),
+                                  gameLogic: createGameLogic(playSettings.0))
     }
     
     //MARK: ViewModels
@@ -29,12 +33,17 @@ class AppPagesFactory {
         return GameSettingsViewModel(downloaderService: createDownloaderService())
     }
     
-    private func createMainPlaygroundViewModel(prodcuts: [Product]) -> MainPlaygroundViewModel {
-        return MainPlaygroundViewModel(products: prodcuts)
+    private func createMainPlaygroundViewModel(prodcuts: [Product],
+                                               playSettings: PlaySettings) -> MainPlaygroundViewModel {
+        return MainPlaygroundViewModel(products: prodcuts, playSettings: playSettings)
     }
     
-    private func createGameLogic() -> GameLogic {
-        return GameLogic(numberOfDuplicates: 2)
+    private func createGameLogic(_ elements: Int) -> GameLogic {
+        return GameLogic(numberOfDuplicates: elements)
+    }
+    
+    private func createPickerLogic() -> PickerLogic {
+        return PickerLogicImpl()
     }
     
     //MARK: Services (should be separated to another class)

@@ -21,25 +21,29 @@ final class PlaygroundPanel: UIView {
     // MARK: - Properties
     weak var dataSource: PlaygroundDataSource?
     weak var delegate: PlaygroundDelegate?
-
-    private let numberOfRows: CGFloat
-    private var imageStates: [CardSide]
     
-    private lazy var customizedCellSize: CGFloat = {
+    private var imageStates: [CardSide]
+    private let grid: Grid
+    
+    private lazy var cellWidth: CGFloat = {
         let screenWidth = UIScreen.main.bounds.width
         let collectionViewWidth = screenWidth - 2 * Constants.collectionSideOffset
-        return (collectionViewWidth - numberOfRows + 1) / numberOfRows
+        return (collectionViewWidth - Constants.interItemSpacing * (grid.cols - 1)) / grid.cols
+    }()
+    
+    private lazy var cellHeight: CGFloat = {
+        return cellWidth * Constants.cellHeightMul
     }()
     
     private lazy var collectionViewHeight: CGFloat = {
-        return customizedCellSize * numberOfRows + numberOfRows - 1
+        return cellHeight * grid.rows + Constants.interItemSpacing * (grid.rows - 1)
     }()
     
     private lazy var layout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: customizedCellSize, height: customizedCellSize)
-        layout.minimumInteritemSpacing = 1
-        layout.minimumLineSpacing = 1
+        layout.itemSize = CGSize(width: cellWidth, height: cellHeight)
+        layout.minimumInteritemSpacing = Constants.interItemSpacing
+        layout.minimumLineSpacing = Constants.interItemSpacing
         return layout
     }()
     
@@ -49,14 +53,13 @@ final class PlaygroundPanel: UIView {
         collectionView.delegate = self
         collectionView.backgroundColor = .clear
         collectionView.isScrollEnabled = false
-        collectionView.backgroundColor = .white
         return collectionView
     }()
     
     // MARK: - Lifecycle
-    init(numberOfRows: Int) {
-        self.numberOfRows = CGFloat(numberOfRows)
-        imageStates = Array(repeating: .closed, count: numberOfRows * numberOfRows)
+    init(grid: Grid) {
+        self.grid = grid
+        imageStates = Array(repeating: .closed, count: grid.size())
         super.init(frame: .zero)
         backgroundColor = .white
         setupViews()
@@ -67,14 +70,13 @@ final class PlaygroundPanel: UIView {
     }
     
     // MARK: - Public
-    func didFoundNotMatch(at indexPaths: [IndexPath]) {
+    func cardsNotMatch(at indexPaths: [IndexPath]) {
         indexPaths.forEach {
             self.imageStates[$0.row].toggle()
-            if let cell = self.collectionView.cellForItem(at: $0) as? CollectionCell {
+            if let cell = self.collectionView.cellForItem(at: $0) as? CardCollectionViewCell {
                 cell.didTapCell()
             }
         }
-        self.collectionView.reloadItems(at: indexPaths)
     }
     
     // MARK: - Private
@@ -87,7 +89,8 @@ final class PlaygroundPanel: UIView {
             $0.height.equalTo(collectionViewHeight)
         }
         
-        collectionView.register(CollectionCell.self, forCellWithReuseIdentifier: "Cell")
+        collectionView.register(CardCollectionViewCell.self,
+                                forCellWithReuseIdentifier: String(describing: CardCollectionViewCell.self))
     }
     
 }
@@ -96,12 +99,13 @@ final class PlaygroundPanel: UIView {
 extension PlaygroundPanel: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return Int(numberOfRows * numberOfRows)
+        return imageStates.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell",
-                                                            for: indexPath) as? CollectionCell
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier:String(describing: CardCollectionViewCell.self),
+            for: indexPath) as? CardCollectionViewCell
         else {
             return UICollectionViewCell()
         }
@@ -118,7 +122,7 @@ extension PlaygroundPanel: UICollectionViewDataSource {
 extension PlaygroundPanel: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? CollectionCell else { return }
+        guard let cell = collectionView.cellForItem(at: indexPath) as? CardCollectionViewCell else { return }
         if imageStates[indexPath.row] == .closed {
             cell.didTapCell()
             imageStates[indexPath.row].toggle()
@@ -133,6 +137,8 @@ extension PlaygroundPanel {
     
     enum Constants {
         static let collectionSideOffset: CGFloat = 8
+        static let cellHeightMul: CGFloat = 0.8
+        static let interItemSpacing: CGFloat = 2
     }
     
 }

@@ -52,7 +52,7 @@ class GameLogic {
     
     // MARK: - Check for uniqueness by using Set
     private func checkForSimilarity(items: [(item: Product, indexPath: IndexPath)]) {
-        let productIds = items.map { $0.item.image.id }
+        let productIds = items.map { $0.item.image.src }
         let uniqueElements = Set(productIds)
         if uniqueElements.count > 1 {
             let selectedIndexes = items.map { $0.indexPath }

@@ -11,17 +11,15 @@ import Foundation
 class MainPlaygroundViewModel {
     
     let products: [Product]
+    let playSettings: PlaySettings
     
-    init(products: [Product]) {
+    init(products: [Product], playSettings: PlaySettings) {
         self.products = products
+        self.playSettings = playSettings
     }
     
     func getNumberOfPairs() -> Int {
-        return products.count / 2
-    }
-    
-    func getGridSize() -> Int {
-        return Int(sqrt(Double(products.count)))
+        return products.count / playSettings.0
     }
     
     func getProduct(at indexPath: IndexPath) -> Product {

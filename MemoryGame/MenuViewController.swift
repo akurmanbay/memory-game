@@ -12,14 +12,14 @@ import SnapKit
 class MenuViewController: UIViewController, ConfigurableBackground {
     
     // MARK: - Properties
-    var didTapStartAGame: (() -> ())?
+    var didStartGame: (() -> ())?
     
     private let gameTitle: UILabel = {
         let label = UILabel()
         label.textColor = Constants.gameTitleColor
         label.text = Constants.gameTitle
         label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 64)
+        label.font = UIFont.systemFont(ofSize: 48)
         label.numberOfLines = 0
         return label
     }()
@@ -83,7 +83,7 @@ class MenuViewController: UIViewController, ConfigurableBackground {
     }
     
     @objc private func didTapStartAGameButton() {
-        didTapStartAGame?()
+        didStartGame?()
     }
 }
 
@@ -96,7 +96,7 @@ extension MenuViewController {
         static let instructions = "Instructions"
         static let scoreboard = "Scoreboard"
         
-        static let gameTitle = "Memory Game"
+        static let gameTitle = "Memorize\nand\nUnify"
         static let gameTitleColor = UIColor(red: 244 / 255, green: 224 / 255, blue: 224 / 250, alpha: 1)
     }
     
