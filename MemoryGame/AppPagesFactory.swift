@@ -28,6 +28,10 @@ class AppPagesFactory {
                                   gameLogic: createGameLogic(playSettings.0))
     }
     
+    func createInstructionsPage() -> InstructionsViewController {
+        return InstructionsViewController()
+    }
+    
     //MARK: ViewModels
     private func createGameSettingsViewModel() -> GameSettingsViewModel {
         return GameSettingsViewModel(downloaderService: createDownloaderService())

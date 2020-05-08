@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class MainPlaygroundPage: UIViewController {
+final class MainPlaygroundPage: UIViewController, ConfigurableBackground {
     
     // MARK: Properties
     
@@ -24,7 +24,6 @@ final class MainPlaygroundPage: UIViewController {
     
     private lazy var playgroundView: PlaygroundPanel = {
         let view = PlaygroundPanel(grid: viewModel.playSettings.1)
-        view.backgroundColor = .black
         view.dataSource = self
         view.delegate = self
         return view
@@ -48,9 +47,9 @@ final class MainPlaygroundPage: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         binding()
+        setBackgroundImage(named: Constants.playgroundBack)
         layoutUI()
     }
-    
     
     // MARK: - Private
     private func binding() {
@@ -126,3 +125,13 @@ extension MainPlaygroundPage: PlaygroundDelegate {
     }
     
 }
+
+// MARK: - Constants
+extension MainPlaygroundPage {
+    
+    enum Constants {
+        static let playgroundBack = "playgroundBack"
+    }
+    
+}
+

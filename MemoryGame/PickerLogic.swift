@@ -91,10 +91,12 @@ class PickerLogicImpl: PickerLogic {
     // MARK: - Private
     private func getAllGridCombinations(for number: Int) {
         grids.removeAll()
-        for col in 2..<6 {
+        for col in 3..<6 {
             for row in col..<7 {
                 let size = col * row
-                if (size % number == 0 && size > number) {
+                if (size % number == 0 &&
+                    size > number &&
+                    abs(col - row) < 3) {
                     grids.append(Grid(cols: col, rows: row))
                 }
             }

@@ -61,7 +61,7 @@ final class PlaygroundPanel: UIView {
         self.grid = grid
         imageStates = Array(repeating: .closed, count: grid.size())
         super.init(frame: .zero)
-        backgroundColor = .white
+        backgroundColor = .clear
         setupViews()
     }
     

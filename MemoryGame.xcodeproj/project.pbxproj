@@ -35,6 +35,7 @@
 		0D1D75AE24638A63002C6BAA /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D1D75AD24638A63002C6BAA /* Grid.swift */; };
 		0D1D75B024639826002C6BAA /* PickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D1D75AF24639826002C6BAA /* PickerView.swift */; };
 		0D1D75B22463A2F3002C6BAA /* PickerLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D1D75B12463A2F3002C6BAA /* PickerLogic.swift */; };
+		0D1D75B5246525DF002C6BAA /* InstructionsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D1D75B4246525DF002C6BAA /* InstructionsPage.swift */; };
 		0DBD7E85232ECE8F006AAE6B /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DBD7E84232ECE8F006AAE6B /* AppCoordinator.swift */; };
 		0DBD7E89232ECEDA006AAE6B /* AppPagesFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DBD7E88232ECEDA006AAE6B /* AppPagesFactory.swift */; };
 		0DBD7E8C232ED368006AAE6B /* GameSettingsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DBD7E8B232ED368006AAE6B /* GameSettingsPage.swift */; };
@@ -95,6 +96,7 @@
 		0D1D75AD24638A63002C6BAA /* Grid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Grid.swift; sourceTree = "<group>"; };
 		0D1D75AF24639826002C6BAA /* PickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerView.swift; sourceTree = "<group>"; };
 		0D1D75B12463A2F3002C6BAA /* PickerLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerLogic.swift; sourceTree = "<group>"; };
+		0D1D75B4246525DF002C6BAA /* InstructionsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionsPage.swift; sourceTree = "<group>"; };
 		0DBD7E84232ECE8F006AAE6B /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		0DBD7E88232ECEDA006AAE6B /* AppPagesFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPagesFactory.swift; sourceTree = "<group>"; };
 		0DBD7E8B232ED368006AAE6B /* GameSettingsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSettingsPage.swift; sourceTree = "<group>"; };
@@ -343,6 +345,14 @@
 			name = Protocols;
 			sourceTree = "<group>";
 		};
+		0D1D75B3246525C6002C6BAA /* Instructions */ = {
+			isa = PBXGroup;
+			children = (
+				0D1D75B4246525DF002C6BAA /* InstructionsPage.swift */,
+			);
+			name = Instructions;
+			sourceTree = "<group>";
+		};
 		0DBD7E81232ECB60006AAE6B /* PresentationLayer */ = {
 			isa = PBXGroup;
 			children = (
@@ -390,6 +400,7 @@
 		0DBD7E8A232ED352006AAE6B /* Pages */ = {
 			isa = PBXGroup;
 			children = (
+				0D1D75B3246525C6002C6BAA /* Instructions */,
 				0D0AA6832338A9E8002DE983 /* Menu */,
 				0DBD7E8D232ED5B5006AAE6B /* GameSettingsPage */,
 				0D0AA66B23329D2E002DE983 /* Playground */,
@@ -658,6 +669,7 @@
 				0DBD7E8C232ED368006AAE6B /* GameSettingsPage.swift in Sources */,
 				0D0AA6772337C1B2002DE983 /* UIImage.swift in Sources */,
 				0D0AA67323377DFA002DE983 /* MainPlaygroundViewModel.swift in Sources */,
+				0D1D75B5246525DF002C6BAA /* InstructionsPage.swift in Sources */,
 				0D0AA66623328AAB002DE983 /* DownloaderService.swift in Sources */,
 				0D0E1206232EBFB700AAF3FF /* MenuViewController.swift in Sources */,
 				0D1D75AE24638A63002C6BAA /* Grid.swift in Sources */,

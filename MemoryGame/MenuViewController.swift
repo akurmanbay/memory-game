@@ -13,6 +13,7 @@ class MenuViewController: UIViewController, ConfigurableBackground {
     
     // MARK: - Properties
     var didStartGame: (() -> ())?
+    var didTapInstructions: (() -> ())?
     
     private let gameTitle: UILabel = {
         let label = UILabel()
@@ -26,17 +27,13 @@ class MenuViewController: UIViewController, ConfigurableBackground {
     
     private let startAGameButton: MainActionButton = {
         let button = MainActionButton(title: Constants.start)
-        button.addTarget(self, action: #selector(didTapStartAGameButton), for: .touchUpInside)
+        button.addTarget(self, action: #selector(didTapStartButton), for: .touchUpInside)
         return button
     }()
     
     private let instructionsButton: MainActionButton = {
         let button = MainActionButton(title: Constants.instructions)
-        return button
-    }()
-    
-    private let scoreboardButton: MainActionButton = {
-        let button = MainActionButton(title: Constants.scoreboard)
+        button.addTarget(self, action: #selector(didTapInstructionsButton), for: .touchUpInside)
         return button
     }()
     
@@ -68,7 +65,7 @@ class MenuViewController: UIViewController, ConfigurableBackground {
         }
         
         view.addSubview(buttonsStackView)
-        [startAGameButton, scoreboardButton, instructionsButton].forEach {
+        [startAGameButton, instructionsButton].forEach {
             buttonsStackView.addArrangedSubview($0)
             $0.snp.makeConstraints {
                 $0.height.equalTo(48)
@@ -82,8 +79,12 @@ class MenuViewController: UIViewController, ConfigurableBackground {
         }
     }
     
-    @objc private func didTapStartAGameButton() {
+    @objc private func didTapStartButton() {
         didStartGame?()
+    }
+    
+    @objc private func didTapInstructionsButton() {
+        didTapInstructions?()
     }
 }
 
@@ -94,7 +95,6 @@ extension MenuViewController {
         static let backgroundImageName = "background"
         static let start = "Start"
         static let instructions = "Instructions"
-        static let scoreboard = "Scoreboard"
         
         static let gameTitle = "Memorize\nand\nUnify"
         static let gameTitleColor = UIColor(red: 244 / 255, green: 224 / 255, blue: 224 / 250, alpha: 1)

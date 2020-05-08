@@ -24,6 +24,10 @@ class AppCoordinator {
             self?.showGameSettingsPage()
         }
         
+        starterPage.didTapInstructions = { [weak self] in
+            self?.showInstructionsPage()
+        }
+        
         navigationController = UINavigationController(rootViewController: starterPage)
     }
     
@@ -50,5 +54,11 @@ class AppCoordinator {
         }
         
         navigationController.pushViewController(mainPlaygroundPage, animated: true)
+    }
+    
+    private func showInstructionsPage() {
+        let instrPage = pagesFactory.createInstructionsPage()
+    
+        navigationController.present(instrPage, animated: true, completion: nil)
     }
 }
