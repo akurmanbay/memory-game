@@ -1,6 +1,7 @@
 # MemoryGame
 
 > Added pod 'SnapKit'
+> Xcode Version 10.1
 
 ![](Media/playGif.gif) 
 <img src="Media/withoutMatches.png" width="24%">
