@@ -59,7 +59,11 @@ class MenuViewController: UIViewController, ConfigurableBackground {
         
         view.addSubview(gameTitle)
         gameTitle.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(32)
+            if #available(iOS 11.0, *) {
+                $0.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).inset(32)
+            } else {
+                $0.top.equalTo(self.topLayoutGuide.snp.bottom).inset(32)
+            }
             $0.left.equalToSuperview().offset(16)
             $0.right.equalToSuperview().offset(-16)
         }

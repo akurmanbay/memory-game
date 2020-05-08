@@ -11,6 +11,7 @@ import Foundation
 class GameLogic {
     
     // MARK: - Properties
+    var numberOfTries = 0
     private var foundItems: Int = 0 {
         didSet {
             didChangeNumberOfMatches?(foundItems)
@@ -38,6 +39,13 @@ class GameLogic {
             }
         }
     }
+    
+    func reset() {
+        foundItems = 0
+        numberOfTries = 0
+        selectedIndexPaths.removeAll()
+        selectedItems.removeAll()
+    }
 
     // MARK: - Private
     private func check() {
@@ -47,6 +55,7 @@ class GameLogic {
             selectedItems.removeFirst()
             openItems.append(firstElement)
         }
+        numberOfTries += 1
         checkForSimilarity(items: openItems)
     }
     

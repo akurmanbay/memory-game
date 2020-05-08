@@ -9,10 +9,7 @@
 import UIKit
 
 class CardCollectionViewCell: UICollectionViewCell {
-    
-    var canReloadCell: (() -> ())?
-    var didEndAnimating: (() -> ())?
-    
+
     private var currentImageState: CardSide = .closed
     
     private let imageView: UIImageView = {
@@ -75,6 +72,16 @@ class CardCollectionViewCell: UICollectionViewCell {
         addSubview(gatesStackView)
         gatesStackView.snp.makeConstraints {
             $0.edges.equalToSuperview()
+        }
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        currentImageState = .closed
+        isUserInteractionEnabled = true
+        [leftGate, rightGate].forEach {
+            $0.removeFromSuperview()
+            gatesStackView.addArrangedSubview($0)
         }
     }
     

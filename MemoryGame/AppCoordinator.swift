@@ -53,6 +53,10 @@ class AppCoordinator {
             self?.navigationController.popToRootViewController(animated: true)
         }
         
+        mainPlaygroundPage.didTapBack = { [weak self] in
+            self?.navigationController.popViewController(animated: true)
+        }
+        
         navigationController.pushViewController(mainPlaygroundPage, animated: true)
     }
     

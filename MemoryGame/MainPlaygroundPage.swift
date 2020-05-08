@@ -13,14 +13,7 @@ final class MainPlaygroundPage: UIViewController, ConfigurableBackground {
     // MARK: Properties
     
     var didEndGame: (() -> ())?
-    
-    private let exitButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Exit", for: .normal)
-        button.setTitleColor(UIColor(red: 84 / 255, green: 160 / 255, blue: 1, alpha: 1), for: .normal)
-        button.addTarget(self, action: #selector(didTapExitButton), for: .touchUpInside)
-        return button
-    }()
+    var didTapBack: (() -> ())?
     
     private lazy var playgroundView: PlaygroundPanel = {
         let view = PlaygroundPanel(grid: viewModel.playSettings.1)
@@ -29,9 +22,22 @@ final class MainPlaygroundPage: UIViewController, ConfigurableBackground {
         return view
     }()
     
+    private lazy var backButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: Constants.backbutton), for: .normal)
+        button.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var reloadButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: Constants.reloadButton), for: .normal)
+        button.addTarget(self, action: #selector(didTapReloadButton), for: .touchUpInside)
+        return button
+    }()
+    
     private let viewModel: MainPlaygroundViewModel
     private let gameLogic: GameLogic
-    
     
     // MARK: - Lifecycle
     init(viewModel: MainPlaygroundViewModel, gameLogic: GameLogic) {
@@ -49,6 +55,7 @@ final class MainPlaygroundPage: UIViewController, ConfigurableBackground {
         binding()
         setBackgroundImage(named: Constants.playgroundBack)
         layoutUI()
+        updateMatchesLabel(matched: 0, total: viewModel.getNumberOfPairs())
     }
     
     // MARK: - Private
@@ -60,9 +67,15 @@ final class MainPlaygroundPage: UIViewController, ConfigurableBackground {
         gameLogic.didChangeNumberOfMatches = { [weak self] numberOfMatches in
             guard let numberOfPairs = self?.viewModel.getNumberOfPairs() else { return }
             if numberOfPairs == numberOfMatches {
-                self?.showAlertController()
+                self?.showGameEndAlert()
             }
+            self?.updateMatchesLabel(matched: numberOfMatches, total: numberOfPairs)
         }
+    }
+    
+    private func updateMatchesLabel(matched: Int, total: Int) {
+        let text = "\(Constants.matches)\(matched)/\(total)"
+        playgroundView.updateMatchesLabel(with: text)
     }
     
     private func layoutUI() {
@@ -71,28 +84,52 @@ final class MainPlaygroundPage: UIViewController, ConfigurableBackground {
             $0.edges.equalToSuperview()
         }
         
-        view.addSubview(exitButton)
-        exitButton.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(16)
-            $0.right.equalToSuperview().offset(-16)
+        view.addSubview(backButton)
+        backButton.snp.makeConstraints {
+            if #available(iOS 11.0, *) {
+                $0.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).inset(12)
+            } else {
+                $0.top.equalTo(self.topLayoutGuide.snp.bottom).inset(12)
+            }
+            $0.left.equalToSuperview().offset(12)
+            $0.width.height.equalTo(36)
+        }
+        
+        view.addSubview(reloadButton)
+        reloadButton.snp.makeConstraints {
+            if #available(iOS 11.0, *) {
+                $0.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).inset(12)
+            } else {
+                $0.top.equalTo(self.topLayoutGuide.snp.bottom).inset(12)
+            }
+            $0.right.equalToSuperview().offset(-12)
+            $0.width.height.equalTo(36)
         }
     }
     
-    private func showAlertController() {
-        let alertController = UIAlertController(title: "Congratulations", message: "You won the game!", preferredStyle: .alert)
-        let submitAction = UIAlertAction(title: "Ok", style: .default) { _ in
+    private func showGameEndAlert() {
+        let alertController = UIAlertController(title: "Congratulations!",
+                                                message: "You won the game!\nYou've made \(gameLogic.numberOfTries) attempts. Can you do better?",
+                                                preferredStyle: .alert)
+        let exitAction = UIAlertAction(title: "Exit", style: .default) { _ in
             alertController.dismiss(animated: true, completion: nil)
             self.didEndGame?()
         }
-        alertController.addAction(submitAction)
+        
+        let restartAction = UIAlertAction(title: "Restart", style: .default) { _ in
+            alertController.dismiss(animated: true, completion: nil)
+            self.reloadData()
+        }
+        alertController.addAction(exitAction)
+        alertController.addAction(restartAction)
         present(alertController, animated: true, completion: nil)
     }
 
-    private func showExitConfirmationAlert() {
-        let alertController = UIAlertController(title: "Exit", message: "Are you sure you want to quit the game?", preferredStyle: .alert)
-        let submitAction = UIAlertAction(title: "Submit", style: .default) { _ in
+    private func showReloadAlert() {
+        let alertController = UIAlertController(title: "Are you sure?", message: "You will lose your current progress", preferredStyle: .alert)
+        let submitAction = UIAlertAction(title: "Reload", style: .default) { _ in
             alertController.dismiss(animated: true, completion: nil)
-            self.didEndGame?()
+            self.reloadData()
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
 
@@ -101,8 +138,19 @@ final class MainPlaygroundPage: UIViewController, ConfigurableBackground {
         present(alertController, animated: true, completion: nil)
     }
     
-    @objc private func didTapExitButton() {
-        showExitConfirmationAlert()
+    private func reloadData() {
+        viewModel.shuffleProducts()
+        gameLogic.reset()
+        updateMatchesLabel(matched: 0, total: viewModel.getNumberOfPairs())
+        playgroundView.reloadGame()
+    }
+    
+    @objc private func didTapBackButton() {
+        didTapBack?()
+    }
+    
+    @objc private func didTapReloadButton() {
+        showReloadAlert()
     }
     
 }
@@ -111,7 +159,7 @@ final class MainPlaygroundPage: UIViewController, ConfigurableBackground {
 extension MainPlaygroundPage: PlaygroundDataSource {
     
     func itemAtIndex(_ indexPath: IndexPath) -> Product {
-        return viewModel.products[indexPath.row]
+        return viewModel.getProduct(at: indexPath)
     }
     
 }
@@ -131,6 +179,9 @@ extension MainPlaygroundPage {
     
     enum Constants {
         static let playgroundBack = "playgroundBack"
+        static let matches = "Matches: "
+        static let backbutton = "backButton"
+        static let reloadButton = "reloadButton"
     }
     
 }

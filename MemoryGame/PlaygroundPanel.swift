@@ -56,6 +56,13 @@ final class PlaygroundPanel: UIView {
         return collectionView
     }()
     
+    private let matchesLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = UIFont.boldSystemFont(ofSize: 24)
+        return label
+    }()
+    
     // MARK: - Lifecycle
     init(grid: Grid) {
         self.grid = grid
@@ -79,14 +86,31 @@ final class PlaygroundPanel: UIView {
         }
     }
     
+    func updateMatchesLabel(with text: String) {
+        matchesLabel.text = text
+    }
+    
+    func reloadGame() {
+        for index in 0..<imageStates.count {
+            imageStates[index] = .closed
+        }
+        collectionView.reloadData()
+    }
+    
     // MARK: - Private
     private func setupViews() {
         addSubview(collectionView)
         collectionView.snp.makeConstraints {
             $0.left.equalToSuperview().offset(Constants.collectionSideOffset)
             $0.right.equalToSuperview().offset(-Constants.collectionSideOffset)
-            $0.centerY.equalToSuperview()
+            $0.centerY.equalToSuperview().offset(20)
             $0.height.equalTo(collectionViewHeight)
+        }
+        
+        addSubview(matchesLabel)
+        matchesLabel.snp.makeConstraints {
+            $0.left.equalTo(collectionView.snp.left)
+            $0.bottom.equalTo(collectionView.snp.top).offset(-10)
         }
         
         collectionView.register(CardCollectionViewCell.self,
